@@ -2,6 +2,8 @@
 
 This is an implementation of ultimate tic tac toe, which is an unsolved game (that is, computers cannot play it perfectly yet).
 
+[You can play the game here](https://blackcapcoder.github.io/ultimate-tic-tac-toe/index.html)
+
 ## Rules
 
 The game board consist of 1 big tic tac toe board, made up of 9 regular small ones. If you win on a small board, you get that tile on the big board. The point of the game is to get 3 in a row on the big board.

@@ -5,6 +5,7 @@
   animIntv     = -1;
   turn         = true;
   resetPending = false;
+  graphical    = true;
 
   let els = document.querySelectorAll('.tile');
   for (let i = 0; i < els.length; i++) {
@@ -39,12 +40,17 @@ setTile = (q,k) => {
   if ( resetPending  ) return;
   if ( !isLegal(q,k) ) return;
 
-  el = document.querySelector('.board[data-ix="'+q+'"] > .tile[data-ix="'+k+'"]');
-  el.classList.add(turn? 'X': 'O');
+  last_move = {q: q, k: k};
+
+  if (graphical) {
+    el = document.querySelector('.board[data-ix="'+q+'"] > .tile[data-ix="'+k+'"]');
+    el.classList.add(turn? 'X': 'O');
+  }
+
   board[q][k] = turn+1;
 
   let w = checkWin(bin(board[q], x=>(x===turn+1)*1));
-  if (w) {
+  if (graphical && w) {
     document.querySelector('.board[data-ix="'+q+'"]').classList.add(turn? 'X': 'O');
   }
 
@@ -61,8 +67,10 @@ setTile = (q,k) => {
 };
 
 swapTurn = _ => {
+  turn = !turn;
+  if (!graphical) return;
+
   let s = document.querySelector('#status');
-  turn  = !turn;
   if (turn) {
     clearInterval(animIntv);
     s.innerText = "Your turn";
@@ -90,12 +98,14 @@ checkWin = n => {
 setActive = k => {
   active = score[k] === 0 ? k : -1;
 
-  for (let i = 0; i < 9; i++) {
-    const el = document.querySelector('.board[data-ix="'+i+'"]');
-    if ((active === -1 && score[i] === 0) || i == active) {
-      el.classList.add('active');
-    } else {
-      el.classList.remove('active');
+  if (graphical) {
+    for (let i = 0; i < 9; i++) {
+      const el = document.querySelector('.board[data-ix="'+i+'"]');
+      if ((active === -1 && score[i] === 0) || i == active) {
+        el.classList.add('active');
+      } else {
+        el.classList.remove('active');
+      }
     }
   }
 
@@ -103,6 +113,7 @@ setActive = k => {
 };
 
 gameWon = p => {
+  if (!graphical) return;
   resetPending = true;
   clearInterval(animIntv);
   document.querySelector('#status').innerText

@@ -1,8 +1,13 @@
+<link rel="stylesheet" href="main.css" />
+
 <div class="game">
+  <div id='status' class='text'>Your turn</div>
   <div class="board root"></div>
+  <div id='click' class='text'>Click to play again</div>
 </div>
 
-<script> // Construct game board
+<!-- Construct game board -->
+<script>
   let b = document.querySelector('.board');
 
   for (let ia = 0; ia < 9; ia++) {
@@ -22,67 +27,13 @@
   }
 </script>
 
+<!-- Game logic -->
 <script src="logic.js"></script>
 <script src="AI.js"></script>
+
 <script>
+  /*  You can find more AI's in AI.js
+      Set to undefined for a 2 player game
+  */
   AI = AI_MOSTLYRANDOM;
 </script>
-
-<style type="text/css" media="all">
-  .tile {
-    width:  48px;
-    height: 48px;
-    background: white;
-    position: relative;
-  }
-  .board {
-    width: calc(151px * 3);
-    border: 2px solid black;
-  }
-  .board > .board {
-    width: 147px !important;
-  }
-  .board {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-around;
-    background: black;
-  }
-  .board > :not(:nth-last-child(1)):not(:nth-last-child(2)):not(:nth-last-child(3)) {
-    margin-bottom: 1px;
-  }
-
-  .tile.cross::after {
-    content: 'X';
-    color: blue;
-    font-family: monospace;
-    font-weight: bolder;
-    font-size:   50px;
-    position: absolute;
-    left: 8px;
-    top: -4px;
-    transform: scale(1.3,1.1);
-  }
-  .tile.circ::after {
-    content: 'O';
-    color: red;
-    font-family: monospace;
-    font-weight: bolder;
-    font-size:   50px;
-    position: absolute;
-    left: 8px;
-    top: -4px;
-    transform: scale(1.5,1.1);
-  }
-
-  .game {
-    position: absolute;
-    left: 50%; top: 50%;
-    transform: translate(-50%, -50%);
-  }
-
-  .board:not(.root) { transition: 0.5s ease; }
-  .board:not(.root):not(.active) {
-    opacity: 0.8;
-  }
-</style>

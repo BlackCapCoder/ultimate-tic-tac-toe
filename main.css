@@ -1,0 +1,118 @@
+body {
+  background: rgba(0,0,64,0.8);
+}
+.root {
+  box-shadow: 0 0 50px rgba(0,0,0,0.4);
+  border: 7px solid black !important;
+  border-left-width: 5px !important;
+  border-right-width: 5px !important;
+  border-radius: 8px;
+}
+.game {
+  position: absolute;
+  left: 50%; top: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.board {
+  width: calc(151px * 3);
+  border: 2px solid black;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  background: black;
+  position: relative;
+}
+.board > .board {
+  width: 147px !important;
+  border-radius: 4px;
+  transition: 0.5s ease !important;
+}
+.board > .board:not(.active), .root.X .active, .root.O .active {
+  opacity: 0.8;
+}
+.board > :not(:nth-last-child(1)):not(:nth-last-child(2)):not(:nth-last-child(3)) {
+  margin-bottom: 1px;
+}
+/* .root.X  */.board.X:after, /* .root.O */ .board.O:after {
+  font-size: 160px !important;
+  top: -42px !important;
+  left: 5px !important;
+  z-index: 5;
+  /* opacity: 0; */
+}
+.root:after, .root.board:after, /*.root.X .tile:after, .root.O .tile:after , .root:not(.X):not(.Y) .board:after, */ .board.X .tile:after, .board.O .tile:after {
+  opacity: 0 !important;
+}
+
+.tile {
+  width:  48px;
+  height: 48px;
+  background: white;
+  position: relative;
+  border-radius: 2px;
+}
+.X::after, .O::after, .X > .tile:after, .O > .tile:after, .board.X:after, .board.O:after {
+  font-family: "Arial Black";
+  font-weight: bolder;
+  font-size:   50px;
+  position: absolute;
+  top: -11px;
+  left: 2.5px;
+}
+.tile.X::after, .X > .tile:after, .board.X:after {
+  content: 'X';
+  color: blue;
+  /* transform: scale(1.3,1.1); */
+  opacity: 1;
+}
+.tile.O::after, .O > .tile:after, .board.O:after {
+  content: 'O';
+  color: red;
+  transform: scale(1.1);
+  opacity: 1;
+}
+
+.root:not(.X):not(.Y) .active {
+  transform: scale(1.02);
+  z-index: 2;
+}
+.root:not(.X):not(.Y) .active:hover {
+  transform: scale(1.07);
+  z-index: 3;
+}
+.root:not(.X):not(.Y) .active .tile:not(.X):not(.O):hover:after {
+  content: '';
+  position: absolute;
+  left: 0; right: 0; top: 0; bottom: 0;
+  z-index: 2;
+  background: rgba(255,128,0,0.1);
+  border-radius: 2px;
+}
+
+.board:after, .tile:after {
+  content: '';
+  opacity: 0;
+  transition: opacity 1.5s ease-in;
+  pointer-events: none;
+}
+.tile:not(.X):not(.Y):after { opacity: 1; }
+
+
+.text {
+  color: white;
+  font-family: monospace;
+  text-transform: uppercase;
+  font-weight: bold;
+  text-align: center;
+  font-size: 40px;
+  padding: 15px 0;
+}
+#click {
+  font-size: 20px;
+  transition: 3s ease-in;
+  opacity: 1;
+}
+.hidden {
+  opacity: 0 !important;
+}

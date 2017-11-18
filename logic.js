@@ -2,18 +2,25 @@
   board        = new Array(9).fill().map(_=>new Array(9).fill(0));
   score        = new Array(9).fill(0);
   active       = -1;
+  animIntv     = -1;
   turn         = true;
   resetPending = false;
 
   let els = document.querySelectorAll('.tile');
   for (let i = 0; i < els.length; i++) {
-    els[i].classList.remove('circ');
-    els[i].classList.remove('cross');
+    els[i].classList.remove('O');
+    els[i].classList.remove('X');
   }
   els = document.querySelectorAll('.board:not(.root)');
   for (let i = 0; i < els.length; i++) {
+    els[i].classList.remove('X');
+    els[i].classList.remove('O');
     els[i].classList.add('active');
   }
+
+  document.querySelector('.root').classList.remove('X');
+  document.querySelector('.root').classList.remove('O');
+  document.querySelector('#click').classList.add('hidden');
 })();
 
 tileClicked = el => {
@@ -25,7 +32,7 @@ tileClicked = el => {
   if ( !isLegal(q,k) ) return;
 
   setTile (q, k);
-  if (AI !== undefined) AI();
+  if (AI !== undefined) setTimeout(AI, 600);
 };
 
 setTile = (q,k) => {
@@ -33,20 +40,39 @@ setTile = (q,k) => {
   if ( !isLegal(q,k) ) return;
 
   el = document.querySelector('.board[data-ix="'+q+'"] > .tile[data-ix="'+k+'"]');
-  el.classList.add(turn? 'cross': 'circ');
+  el.classList.add(turn? 'X': 'O');
   board[q][k] = turn+1;
 
-  if ( (score[q] = checkWin(bin(board[q], x=>(x===turn+1)*1))
+  let w = checkWin(bin(board[q], x=>(x===turn+1)*1));
+  if (w) {
+    document.querySelector('.board[data-ix="'+q+'"]').classList.add(turn? 'X': 'O');
+  }
+
+  if ( (score[q] = w
                  ? turn+1
                  : 511===bin(board[q], x=>(x!==0)*1)
                  ? 3: 0)
     && ( checkWin(bin(score, x=>(x===turn+1)*1))
-      || 511===bin(score, x=>(x!==0)*1)
-       ) ) return gameWon(score[q]);
+      || 511===bin(score, x=>(x!==0)*1))
+     ) return gameWon(score[q]);
 
   setActive(k);
-  turn = !turn;
+  swapTurn();
 };
+
+swapTurn = _ => {
+  let s = document.querySelector('#status');
+  turn  = !turn;
+  if (turn) {
+    clearInterval(animIntv);
+    s.innerText = "Your turn";
+  } else {
+    s.innerText = ".";
+    animIntv = setInterval(_ => {
+      s.innerText = s.innerText.length >= 3? '.' : s.innerText + '.' ;
+    }, 250);
+  }
+}
 
 isLegal = (q,k) => !(board[q][k] !== 0 || (active !== q && active !== -1));
 
@@ -77,6 +103,11 @@ setActive = k => {
 };
 
 gameWon = p => {
-  alert (['Nobody won!', 'Circle won!', 'Cross won!', "It's a tie!"][p]);
   resetPending = true;
+  clearInterval(animIntv);
+  document.querySelector('#status').innerText
+    = ['Nobody won!', 'Circle won!', 'Cross won!', "It's a tie!"][p];
+  if (p==1 || p==2)
+    document.querySelector('.root').classList.add(p==1? 'O': 'X');
+  document.querySelector('#click').classList.remove('hidden');
 };

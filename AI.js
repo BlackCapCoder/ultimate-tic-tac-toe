@@ -51,7 +51,7 @@ repeatedly = (ai, cnt, fallback) => {
 
 AI_MOSTLYRANDOM
   = _ => AI_WIN()
-      || repeatedly(nolose(AI_RANDOM), 10, AI_RANDOM);
+      || repeatedly(nolose(AI_RANDOM), 1000, AI_RANDOM);
 
 
 legalBoards = _ => {

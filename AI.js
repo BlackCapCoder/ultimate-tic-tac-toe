@@ -74,19 +74,12 @@ legalTiles = q => {
 hypotetically = _ => {
   let old = {
     board: board.map(x => x.slice(0)),
-    score: score,
+    score: score.slice(0),
     active: active,
     animIntv: animIntv,
     turn: turn,
     resetPending: resetPending,
   };
-
-  board        = board.slice(0);
-  score        = score.slice(0);
-  active       = active;
-  animIntv     = animIntv;
-  turn         = turn;
-  resetPending = resetPending;
 
   return old;
 };
